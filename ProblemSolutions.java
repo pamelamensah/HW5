@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   PAMELA MENSAH / 002
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -30,13 +30,19 @@ class ProblemSolutions {
      * @return      - returns boolean value B is a subset of A.
      */
 
-    public boolean isSubset(int list1[], int list2[]) {
+    public boolean isSubset(int[] list1, int[] list2) {
+        HashSet<Integer> set = new HashSet<>();
 
-        // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
-
-        return false;
+        // put all elements of list1 in a set
+        for (int x : list1) set.add(x);
+        
+        // check if every element of list2 is in the set
+        for (int y : list2) {
+            if (!set.contains(y)) 
+            return false;
+        }
+        return true;
     }
-
 
     /**
      * Method: findKthLargest
@@ -53,9 +59,16 @@ class ProblemSolutions {
 
     public int findKthLargest(int[] array, int k) {
 
-        // ADD YOUR CODE HERE
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        // keep only k biggest elements in the heap
 
-        return 0;
+        for (int num : array) {
+            pq.add(num);
+            if (pq.size() > k) pq.poll();
+        }
+
+        // smallest in the heap is the kth largest overall
+        return pq.peek();
     }
 
 
@@ -72,11 +85,18 @@ class ProblemSolutions {
      * @return          - Sorted array with all elements in A and B.
      */
 
-    public int[] sort2Arrays(int[] array1, int[] array2) {
+    public int[] sort2Arrays(int[] a, int[] b) {
 
-        // ADD YOU CODE HERE
+        int[] result = new int[a.length + b.length];
+        int i = 0;
 
-        return null;
+        // add all elements from both arrays
+        for (int x : a) result[i++] = x;
+        for (int y : b) result[i++] = y;
+
+        // sort final array
+        Arrays.sort(result);
+        return result;
     }
 
 }

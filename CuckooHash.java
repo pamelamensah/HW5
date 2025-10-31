@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   PAMELA MENSAH / 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -244,14 +244,56 @@ public class CuckooHash<K, V> {
      * @param value the value of the element to add
 	 */
 
- 	public void put(K key, V value) {
-
-		// ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE.
-		// Also make sure you read this method's prologue above, it should help
-		// you. Especially the two HINTS in the prologue.
-
-		return;
+    public void put(K key, V value) {
+		int pos1 = hash1(key);
+		int pos2 = hash2(key);
+		
+		if (table[pos1] != null && 
+			key.equals(table[pos1].getBucKey()) && 
+			value.equals(table[pos1].getValue())) {
+			return; 
+		}
+		
+		if (table[pos2] != null && 
+			key.equals(table[pos2].getBucKey()) && 
+			value.equals(table[pos2].getValue())) {
+			return; 
+		}
+		
+		// Create a temporary bucket for the new element
+		Bucket<K, V> newBucket = new Bucket<>(key, value);
+		
+		// Start with the first hash position
+		int currentPos = pos1;
+		Bucket<K, V> currentBucket = newBucket;
+		
+		for (int count = 0; count < CAPACITY; count++) {
+			// If current position is empty, place the bucket here
+			if (table[currentPos] == null) {
+				table[currentPos] = currentBucket;
+				return;
+			}
+			
+			Bucket<K, V> temp = table[currentPos];
+			table[currentPos] = currentBucket;
+			currentBucket = temp;
+			
+			// Move to the alternate position for the displaced bucket
+			int tempPos1 = hash1(currentBucket.getBucKey());
+			int tempPos2 = hash2(currentBucket.getBucKey());
+			
+			if (currentPos == tempPos1) {
+				currentPos = tempPos2;
+			} else {
+				currentPos = tempPos1;
+			}
+		}
+		
+		rehash();
+		
+		put(currentBucket.getBucKey(), currentBucket.getValue());
 	}
+
 
 
 	/**
@@ -353,4 +395,3 @@ public class CuckooHash<K, V> {
 	}
 
 }
-
